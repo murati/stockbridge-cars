@@ -33,11 +33,11 @@ namespace StockbridgeFinancials.Models.ScriptingModels
                 new CarsScripting { Message= "Price Limit is set...",Script = "document.getElementById('make-model-max-price').value='100000'" },
                 new CarsScripting { Message= "Distance is set...",Script = "document.getElementById('make-model-maximum-distance').value='all'" },
                 new CarsScripting { Message= "Zip Code is set...",Script = "document.getElementById('make-model-zip').value='94596'" },
-                new CarsScripting { Message= "Searching...",Script = "document.forms[0].getElementsByTagName('button')[0].click()", IsNavigation = true, IsResultsPage = true},
-                new CarsScripting { Message= "Moving to 2nd Page",Script = "document.querySelector('[id=pagination-direct-link-2]').click()", IsNavigation = true, IsResultsPage = true},
-                new CarsScripting { Message= "Home Delivery Checked!",Script = "document.getElementsByName('home_delivery')[1].click()", IsNavigation = true, IsResultsPage = true},
-                new CarsScripting { Message= "Model X Checked!",Script = "document.querySelectorAll('[value=tesla-model_x]')[1].click()", IsNavigation = true, IsResultsPage = true},
-                new CarsScripting { Message= "Moving to 2nd Page",Script = "document.querySelector('[id=pagination-direct-link-2]').click()", IsNavigation = true, IsResultsPage = true},
+                new CarsScripting { Message= "Searching...",Script = "document.forms[0].getElementsByTagName('button')[0].click()", IsNavigation = true, IsResultsPage = true, Selector="#pagination-direct-link-2"},
+                new CarsScripting { Message= "Moving to 2nd Page",Script = "document.querySelector('[id=pagination-direct-link-2]').click()", IsNavigation = true, IsResultsPage = true,Selector="#pagination-direct-link-2"},
+                new CarsScripting { Message= "Home Delivery Checked!",Script = "document.getElementsByName('home_delivery')[1].click()", IsNavigation = true, IsResultsPage = true,Selector="#pagination-direct-link-2"},
+                new CarsScripting { Message= "Model X Checked!",Script = "document.querySelectorAll('[value=tesla-model_x]')[1].click()", IsNavigation = true, IsResultsPage = true,Selector="#pagination-direct-link-2"},
+                new CarsScripting { Message= "Moving to 2nd Page",Script = "document.querySelector('[id=pagination-direct-link-2]').click()", IsNavigation = true, IsResultsPage = true,Selector="#pagination-direct-link-2"},
             };
         }
 

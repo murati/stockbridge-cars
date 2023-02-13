@@ -2,6 +2,7 @@
 using CefSharp.DevTools.Page;
 using CefSharp.OffScreen;
 using HtmlAgilityPack;
+using Stockbridge.Cars.Context;
 using Stockbridge.Cars.Handlers;
 using StockbridgeFinancials.Models.DataModels;
 using StockbridgeFinancials.Models.ScriptingModels;
@@ -26,19 +27,22 @@ namespace Stockbridge.Cars // Note: actual namespace depends on the project name
             CreateFolder("Outputs");
             try
             {
-                Cef.EnableWaitForBrowsersToClose();
-                var settings = new CefSettings { CachePath = Path.GetFullPath("cache") };
-                var success = await Cef.InitializeAsync(settings);
-                if (!success)
-                    return;
-                var scriptsToExecute = CarsScripting.InitializeCarsScripting();
+                AsyncContext.Run(async delegate
+                {
+                    Cef.EnableWaitForBrowsersToClose();
+                    var settings = new CefSettings { CachePath = Path.GetFullPath("cache") };
+                    var success = await Cef.InitializeAsync(settings);
+                    if (!success)
+                        return;
+                    var scriptsToExecute = CarsScripting.InitializeCarsScripting();
 
-                await ScrapeCarsDotCom(scriptsToExecute); 
+                    await ScrapeCarsDotCom(scriptsToExecute);
+                });
 
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"An unexpected error has occured. See details:\n{ex.Message}");
+                Console.WriteLine($"An unexpected error has occured. See details:\n{ex.Message}\n{ex.StackTrace}");
                 BreakExecution();
             }
             Cef.WaitForBrowsersToClose();
@@ -109,18 +113,19 @@ namespace Stockbridge.Cars // Note: actual namespace depends on the project name
                 for (int i = 0; i < carsScriptings.Count; i++)
                 {
                     var scripting = carsScriptings.ElementAt(i);
-                     
-                    if (!string.IsNullOrEmpty(scripting.Selector))
-                        await browser.WaitForSelectorAsync(scripting.Selector, new TimeSpan(0, 0, 10));
+                    await Task.Delay(1000); // Following lines throws exception all the time. Delay() lowers the probability of throwing exception
+                    //if (!string.IsNullOrEmpty(scripting.Selector) && !scripting.IsNavigation)
+                    //    await browser.WaitForSelectorAsync(scripting.Selector);
                     scriptResult = await browser.EvaluateScriptAsync(scripting.Script);
                     PrintJSResult(scripting.Message, scriptResult);
                     if (scriptResult.Success)
                     {
                         if (scripting.IsNavigation)
                         {
+                            await Task.Delay(3000);
                             navResult = await browser.WaitForNavigationAsync();
                             PrintWaitResult(navigationIndex, navResult);
-                            await browser.WaitForRenderIdleAsync(1500);
+                            await browser.WaitForRenderIdleAsync();
                             if (navResult.Success)
                             {
                                 await browser.WaitForInitialLoadAsync();
