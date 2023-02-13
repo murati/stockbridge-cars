@@ -11,6 +11,7 @@ namespace StockbridgeFinancials.Models.ScriptingModels
     {
         public string Message { get; set; }
         public string Script { get; set; }
+        public string Selector { get; set; }
         public bool IsNavigation { get; set; }
         public bool IsResultsPage { get; set; }
         public int StartingIndex { get; set; }
@@ -18,14 +19,14 @@ namespace StockbridgeFinancials.Models.ScriptingModels
         public static List<CarsScripting> InitializeCarsScripting()
         {
             return new List<CarsScripting> {
-                new CarsScripting { Message= "Menu clicked...", Script= "document.getElementsByClassName('nav-user-menu-button')[0].click()" },
-                new CarsScripting { Message= "Sign-in clicked...",Script = "document.getElementsByClassName('global-header-container')[0].children[0].shadowRoot.lastElementChild.lastElementChild.lastElementChild.children[0].click()" },
-                new CarsScripting { Message= "Login Name entered...",Script = "document.querySelector('[id=auth-modal-email]').value = 'johngerson808@gmail.com'" },
-                new CarsScripting { Message= "Password entered...",Script = "document.querySelector('[id=auth-modal-current-password]').value = 'test8008'" },
+                new CarsScripting { Message= "Menu clicked...", Script= "document.getElementsByClassName('nav-user-menu-button')[0].click()", Selector=".nav-user-menu-button'" },
+                new CarsScripting { Message= "Sign-in clicked...",Script = "document.getElementsByClassName('global-header-container')[0].children[0].shadowRoot.lastElementChild.lastElementChild.lastElementChild.children[0].click()", Selector =".global-header-container"},
+                new CarsScripting { Message= "Login Name entered...",Script = "document.querySelector('[id=auth-modal-email]').value = 'johngerson808@gmail.com'", Selector="#auth-modal-email" },
+                new CarsScripting { Message= "Password entered...",Script = "document.querySelector('[id=auth-modal-current-password]').value = 'test8008'",Selector="#auth-modal-current-password" },
                 new CarsScripting { Message= "Sign-in Button clicked...",Script = "document.querySelector('[type=sign_in]').form.getElementsByTagName('ep-button')[0].click()", IsNavigation = true },
-                new CarsScripting { Message= "Used Cars are being selected...",Script = "document.getElementById('make-model-search-stocktype').value = 'used'" },
-                new CarsScripting { Message= "Used Cars selected!",Script = "document.getElementById('make-model-search-stocktype').dispatchEvent(new Event('change'))" },
-                new CarsScripting { Message= "Preferred Car Make is being selected..." ,Script = "document.getElementById('makes').value = 'tesla'"},
+                new CarsScripting { Message= "Used Cars are being selected...",Script = "document.getElementById('make-model-search-stocktype').value = 'used'",Selector="#make-model-search-stocktype" },
+                new CarsScripting { Message= "Used Cars selected!",Script = "document.getElementById('make-model-search-stocktype').dispatchEvent(new Event('change'))",Selector="#make-model-search-stocktype" },
+                new CarsScripting { Message= "Preferred Car Make is being selected..." ,Script = "document.getElementById('makes').value = 'tesla'",Selector="#makes"},
                 new CarsScripting { Message= "Preferred Car Make selected!",Script = "document.getElementById('makes').dispatchEvent(new Event('change'))" },
                 new CarsScripting { Message= "Preferred Model is being selected...",Script = "document.getElementById('models').value = 'tesla-model_s'" },
                 new CarsScripting { Message= "Preferred Model selected!",Script = "document.getElementById('models').dispatchEvent(new Event('change'))" },

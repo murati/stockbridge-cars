@@ -2,6 +2,7 @@
 using CefSharp.DevTools.Page;
 using CefSharp.OffScreen;
 using HtmlAgilityPack;
+using Stockbridge.Cars.Handlers;
 using StockbridgeFinancials.Models.DataModels;
 using StockbridgeFinancials.Models.ScriptingModels;
 using System.Diagnostics;
@@ -32,8 +33,7 @@ namespace Stockbridge.Cars // Note: actual namespace depends on the project name
                     return;
                 var scriptsToExecute = CarsScripting.InitializeCarsScripting();
 
-                var results = await ScrapeCarsDotCom(scriptsToExecute);
-                GenerateOutputs(results);
+                await ScrapeCarsDotCom(scriptsToExecute); 
 
             }
             catch (Exception ex)
@@ -65,7 +65,7 @@ namespace Stockbridge.Cars // Note: actual namespace depends on the project name
             }
         }
 
-        private static async Task<List<string>> ScrapeCarsDotCom(List<CarsScripting> carsScriptings)
+        private static async Task ScrapeCarsDotCom(List<CarsScripting> carsScriptings)
         {
             //Reduce rendering speed to one frame per second so it's easier to take screen shots
             var browserSettings = new BrowserSettings { WindowlessFrameRate = 1 };
@@ -78,6 +78,7 @@ namespace Stockbridge.Cars // Note: actual namespace depends on the project name
             {
 
                 await browser.WaitForInitialLoadAsync();
+                //browser.RenderProcessMessageHandler = new RenderProcessMessageHandler();
 
                 //Check preferences on the CEF UI Thread
                 await Cef.UIThreadTaskFactory.StartNew(delegate
@@ -108,6 +109,9 @@ namespace Stockbridge.Cars // Note: actual namespace depends on the project name
                 for (int i = 0; i < carsScriptings.Count; i++)
                 {
                     var scripting = carsScriptings.ElementAt(i);
+                     
+                    if (!string.IsNullOrEmpty(scripting.Selector))
+                        await browser.WaitForSelectorAsync(scripting.Selector, new TimeSpan(0, 0, 10));
                     scriptResult = await browser.EvaluateScriptAsync(scripting.Script);
                     PrintJSResult(scripting.Message, scriptResult);
                     if (scriptResult.Success)
@@ -149,7 +153,7 @@ namespace Stockbridge.Cars // Note: actual namespace depends on the project name
 
                 }
 
-                return results;
+                GenerateOutputs(results);
             }
         }
 
