@@ -114,7 +114,6 @@ namespace Stockbridge.Cars // Note: actual namespace depends on the project name
                 {
                     var scripting = carsScriptings.ElementAt(i);
                     await Task.Delay(1000); // Following lines throws exception all the time. Delay() lowers the probability of throwing exception
-                    //if (!string.IsNullOrEmpty(scripting.Selector) && !scripting.IsNavigation)
                     //    await browser.WaitForSelectorAsync(scripting.Selector);
                     scriptResult = await browser.EvaluateScriptAsync(scripting.Script);
                     PrintJSResult(scripting.Message, scriptResult);
